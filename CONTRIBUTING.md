@@ -20,10 +20,10 @@ With a local virtualenv instead: `pip install -e ".[test]"`, then `python -m pyt
 
 The tests start a fake ingest server on `127.0.0.1`; they never reach the internet.
 
-## Audit the dependencies
+## Audit the dependencies and check the types
 
 ```sh
-docker run --rm -v "$PWD":/w -w /w python:3.13-slim sh -c 'pip install -q pip-audit && pip-audit .'
+docker run --rm -v "$PWD":/w -w /w python:3.13-slim sh -c 'pip install -q -e ".[test]" pip-audit mypy && pip-audit && mypy src'
 ```
 
 ## Rules the code follows

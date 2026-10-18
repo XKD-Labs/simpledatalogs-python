@@ -9,7 +9,7 @@ import os
 import threading
 import time
 import weakref
-from typing import Any, Dict, List, Mapping, Optional, Tuple, Union
+from typing import Any, Dict, List, Mapping, Optional, Tuple, Union, cast
 
 from ._events import (
     MAX_PROPS,
@@ -268,11 +268,11 @@ class _BaseClient:
                 return bool(step_value)
 
             if step_kind == "wait":
-                time.sleep(step_value)  # type: ignore[arg-type]
+                time.sleep(cast(float, step_value))
                 continue
 
             # Without a deadline a failure ends this pass; the pause decides the next.
-            if self._send_batch(step_value, deadline) == FAILED and deadline is None:  # type: ignore[arg-type]
+            if self._send_batch(cast(List[Entry], step_value), deadline) == FAILED and deadline is None:
                 return False
 
     # Opens the disk outbox when a directory is set; an unusable one falls back to memory.
@@ -556,11 +556,11 @@ class AsyncClient(_BaseClient):
                 return bool(step_value)
 
             if step_kind == "wait":
-                await asyncio.sleep(step_value)  # type: ignore[arg-type]
+                await asyncio.sleep(cast(float, step_value))
                 continue
 
             # The blocking HTTP call runs in the default executor, so the loop never waits on the network.
-            outcome = await running_loop.run_in_executor(None, self._send_batch, step_value, deadline)
+            outcome = await running_loop.run_in_executor(None, self._send_batch, cast(List[Entry], step_value), deadline)
 
             if outcome == FAILED and deadline is None:
                 return False

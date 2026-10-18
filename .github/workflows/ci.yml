@@ -40,9 +40,12 @@ jobs:
         with:
           persist-credentials: false
 
-      # The package has no runtime dependencies; this checks the test tools and build backend too.
-      - run: pip install --root-user-action=ignore pip-audit build
+      # The package has no runtime dependencies; auditing the test environment covers the tools too.
+      - run: pip install --root-user-action=ignore -e ".[test]" pip-audit build mypy
 
-      - run: pip-audit .
+      - run: pip-audit
+
+      # py.typed promises types, so they are checked.
+      - run: mypy src
 
       - run: python -m build

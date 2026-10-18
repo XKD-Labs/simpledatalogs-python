@@ -53,9 +53,7 @@ def format_ts(timestamp: Timestamp = None) -> str:
             return timestamp.astimezone(timezone.utc).isoformat(timespec="milliseconds")
 
         # A finite epoch number is seconds.
-        is_epoch_number = isinstance(timestamp, (int, float)) and not isinstance(timestamp, bool)
-
-        if is_epoch_number and math.isfinite(timestamp):
+        if isinstance(timestamp, (int, float)) and not isinstance(timestamp, bool) and math.isfinite(timestamp):
             return datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat(timespec="milliseconds")
     except (OverflowError, OSError, ValueError):
         pass
