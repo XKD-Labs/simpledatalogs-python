@@ -1,0 +1,48 @@
+# Runs the tests on every push and pull request, on every supported Python.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+
+    # The official image is the interpreter, so nothing is installed on the runner.
+    container: python:${{ matrix.python-version }}-slim
+
+    steps:
+      # actions/checkout v7.0.1, pinned by commit.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - run: pip install --root-user-action=ignore -e ".[test]"
+
+      - run: python -m pytest -q
+
+  audit:
+    runs-on: ubuntu-latest
+    container: python:3.13-slim
+
+    steps:
+      # actions/checkout v7.0.1, pinned by commit.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      # The package has no runtime dependencies; this checks the test tools and build backend too.
+      - run: pip install --root-user-action=ignore pip-audit build
+
+      - run: pip-audit .
+
+      - run: python -m build
