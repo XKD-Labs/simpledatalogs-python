@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "simpledatalogs"
+dynamic = ["version"]
+description = "Send events and log lines from Python to simpledatalogs, without blocking or breaking your app."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "XKD Labs", email = "mail@xkdlabs.com" }]
+keywords = ["analytics", "logging", "events", "simpledatalogs", "observability"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: AsyncIO",
+    "Framework :: Django",
+    "Framework :: FastAPI",
+    "Framework :: Flask",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: System :: Logging",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://simpledatalogs.com"
+Documentation = "https://simpledatalogs.com/docs"
+Source = "https://github.com/XKD-Labs/simpledatalogs-python"
+Changelog = "https://github.com/XKD-Labs/simpledatalogs-python/blob/main/CHANGELOG.md"
+Issues = "https://github.com/XKD-Labs/simpledatalogs-python/issues"
+
+[tool.hatch.version]
+path = "src/simpledatalogs/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/simpledatalogs"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md", "CHANGELOG.md", "LICENSE", "SECURITY.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
