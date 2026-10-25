@@ -54,6 +54,7 @@ sdl.track("import_done", {"rows": 1200}, timestamp=finished_at)  # a datetime or
 - Every line gets a UUID `event_id` and a `ts` when you call `track()` or `log()`, so a retry never counts twice.
 - Props are strings, finite numbers or booleans (enums send their value); anything else is skipped with a warning. At most 100 props.
 - Identity is per call: `user_id`, `device_id`, `session_id`, `anonymous_id`.
+- Events from a cron job, a worker or a sync can say so with `{"app_state": "background"}`, so the Sessions tab counts them as passive sessions; anything else counts as someone using your product.
 - `sdl.flush(timeout=5)` sends now and returns `True` when nothing is left; `sdl.close()` flushes and stops the thread.
 - `sdl.set_enabled(False)` is an opt-out: it deletes every unsent line and ignores new ones until `set_enabled(True)`.
 
