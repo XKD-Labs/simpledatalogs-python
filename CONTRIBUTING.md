@@ -35,7 +35,13 @@ docker run --rm -v "$PWD":/w -w /w python:3.13-slim sh -c 'pip install -q -e ".[
 
 ## Releases
 
-Maintainers bump `src/simpledatalogs/_version.py` and `CHANGELOG.md`, then push a tag with the same version (e.g. `0.1.0`). The publish workflow tests, builds and uploads to PyPI with trusted publishing.
+Maintainers bump `src/simpledatalogs/_version.py` and `CHANGELOG.md`, run the tests, then build and upload from their own machine with a PyPI API token (nothing runs on GitHub):
+
+```sh
+docker run --rm -it -v "$PWD":/w -w /w python:3.13-slim sh -c 'pip install --quiet build twine && python -m build && twine upload dist/*'
+```
+
+Then tag the same version (e.g. `0.1.0`) and push it.
 
 ## Security
 
